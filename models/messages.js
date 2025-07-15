@@ -10,26 +10,45 @@ const messageSchema = new mongoose.Schema({
     required: true,
   },
   content: {
-    type: String, // encryption
+    type: String,
     required: true,
   },
   codeType: {
     type: String,
-    required: true,
     default: "aes",
   },
   read: {
     type: Boolean,
     default: false,
   },
-  unloackedAt: {
+  unlockedAt: {
     type: Date,
   },
-  unloackDuration: {
+  unlockDuration: {
     type: Number,
-    default: 10,
+    default: 40,
   },
   selfDestruct: {
+    type: Boolean,
+    default: false,
+  },
+  failedAttempts: {
+    type: Number,
+    default: 0,
+  },
+  permanentlyLocked: {
+    type: Boolean,
+    default: false,
+  },
+  hiddenFromUser: {
+    type: Boolean,
+    default: false,
+  },
+  status: {
+    type: String,
+    default: "active",
+  },
+  wasDecryptedOnce: {
     type: Boolean,
     default: false,
   },

@@ -6,6 +6,7 @@ dotenv.config();
 import messageRoute from "./routes/message.js";
 
 import connectDB from "./config/database.js";
+import {startMessageCleanupJob} from "./cronJob/cleanMessages.js"
 
 const app = express();
 
@@ -23,4 +24,6 @@ connectDB().then(() => {
   );
 });
 
+//start cron job
+startMessageCleanupJob()
 export default app;

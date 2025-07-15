@@ -28,7 +28,7 @@ export const createMessages = async (req, res) => {
       content: encrypted,
       codeType: codeType || "aes",
       selfDestruct: selfDestruct || false,
-      unlockDuration: unlockDuration || 10,
+      unlockDuration: unlockDuration || 120,
     });
 
     await newMessage.save();
