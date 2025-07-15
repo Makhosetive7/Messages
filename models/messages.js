@@ -13,6 +13,15 @@ const messageSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  replyTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Message",
+    default: null,
+  },
+  replyToSummary: {
+    type: String,
+    default: null,
+  },
   codeType: {
     type: String,
     default: "aes",

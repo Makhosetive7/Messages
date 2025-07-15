@@ -1,5 +1,5 @@
 import messages from "../../models/messages.js";
-import {encryptAES} from "../../utils/crypto.js";
+import { decryptAES, encryptAES } from "../../utils/crypto.js";
 
 export const createMessages = async (req, res) => {
   try {
@@ -11,6 +11,7 @@ export const createMessages = async (req, res) => {
       codeType,
       selfDestruct,
       unlockDuration,
+      replyTo,
     } = req.body;
 
     if (!sender || !receiver || !message || !key) {
@@ -21,6 +22,18 @@ export const createMessages = async (req, res) => {
     }
 
     const encrypted = encryptAES(message, key);
+    let replyToSummary = null;
+
+    //if replying fetch the original and decrypted preview
+    if (replyTo) {
+      const original = await messages.findById(replyTo);
+      if (original) {
+        const decryptedOriginal = decryptAES(original.content, key);
+        replyToSummary = decryptedOriginal
+          ? decryptedOriginal.slice(0, 25)
+          : "unable to preview message";
+      }
+    }
 
     const newMessage = new messages({
       sender,
@@ -29,6 +42,8 @@ export const createMessages = async (req, res) => {
       codeType: codeType || "aes",
       selfDestruct: selfDestruct || false,
       unlockDuration: unlockDuration || 120,
+      replyTo: replyTo || null,
+      replyToSummary: replyToSummary || null,
     });
 
     await newMessage.save();

@@ -38,7 +38,7 @@ export const receiveMessages = async (req, res) => {
 
           if (msg.failedAttempts >= 2) {
             msg.hiddenFromUser = true;
-            msg.status = msg.selfDestruct ? 'deleted' : 'locked';
+            msg.status = msg.selfDestruct ? "deleted" : "locked";
             msg.permanentlyLocked = !msg.selfDestruct;
             await msg.save();
 
@@ -46,7 +46,7 @@ export const receiveMessages = async (req, res) => {
               id: msg._id,
               sender: msg.sender,
               status: `Message ${msg.status} after 2 failed attempts`,
-              encrypted: msg.content
+              encrypted: msg.content,
             };
           }
 
@@ -56,7 +56,7 @@ export const receiveMessages = async (req, res) => {
             sender: msg.sender,
             status: "Incorrect key",
             failedAttempts: msg.failedAttempts,
-            encrypted: msg.content
+            encrypted: msg.content,
           };
         }
 
@@ -87,7 +87,9 @@ export const receiveMessages = async (req, res) => {
             encrypted: msg.content,
             wasDecryptedOnce: true,
             status: "Message re-locked after timer",
-            createdAt: msg.createdAt
+            createdAt: msg.createdAt,
+            replyTo: msg.replyTo,
+            replyToSummary: msg.replyToSummary,
           };
         }
 
@@ -107,7 +109,9 @@ export const receiveMessages = async (req, res) => {
           unlockExpiresIn: `${secondsLeft}s`,
           read: msg.read,
           wasDecryptedOnce: true,
-          status: "Message unlocked"
+          status: "Message unlocked",
+          replyTo: msg.replyTo,
+          replyToSummary: msg.replyToSummary,
         };
       })
     );
